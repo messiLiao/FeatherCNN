@@ -31,7 +31,6 @@ void* _mm_malloc(size_t sz, size_t align)
     return malloc(sz);
 #else
     int alloc_result = posix_memalign(&ptr, align, sz);
-    int alloc_result = 0;
     if (alloc_result != 0)
     {
         return NULL;
