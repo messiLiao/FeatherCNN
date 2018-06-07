@@ -102,6 +102,36 @@ void test(std::string model_path, std::string data_path, int loop, int num_threa
         input = NULL;
     }
 }
+#if defined(__RTEMS__)
+#include <rtems.h>
+
+/* NOTICE: the clock driver is explicitly disabled */
+#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
+#define CONFIGURE_MICROSECONDS_PER_TICK    100
+
+#define CONFIGURE_SEMAPHORES_FOR_FILE_SYSTEMS
+
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+#define CONFIGURE_MAXIMUM_TASKS 10
+
+#define CONFIGURE_FILESYSTEM_DOSFS
+
+#define CONFIGURE_INIT
+
+#include <rtems/confdefs.h>
+#include <rtems/shellconfig.h>
+rtems_task Init (rtems_task_argument argument)
+{
+        size_t num_threads = 1;
+        size_t loop = 1;
+        std::string model_path("/media/mmcsd-0-0/googlenet.feathermodel");
+        std::string data_path("/media/mmcsd-0-0/test.image");
+        test(model_path, data_path, loop, num_threads);
+}
+#else
 int main(int argc, char* argv[])
 {
     if (argc == 5)
@@ -117,3 +147,4 @@ int main(int argc, char* argv[])
     }
     return 0;
 }
+#endif

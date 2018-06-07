@@ -29,12 +29,13 @@
 # DAMAGE.
 
 # For cross-compiling on arm64 Linux using gcc-aarch64-linux-gnu package:
-# - install AArch64 tool chain:
-#   $ sudo apt-get install g++-aarch64-linux-gnu
-# - cross-compiling config
-#   $ cmake -DCMAKE_TOOLCHAIN_FILE=../dynamorio/make/toolchain-arm64.cmake ../dynamorio
-# You may have to set CMAKE_FIND_ROOT_PATH to point to the target enviroment, e.g.
-# by passing -DCMAKE_FIND_ROOT_PATH=/usr/aarch64-linux-gnu on Debian-like systems.
+# - install rtems tool chain with --prefix=~/opt/rtems/$rtems_version:
+#   until 2018.5, the current version is 5
+# - install target bsp and rtems-libbsd to the same path
+# - link the library libgomp when build the execution binary.
+# - if you have the diffrent path, change the RTEMS_TOOLS and BSP_DIR value bellow.
+# - my target bsp is beagleboneblack, if yous are not, change the BSP_CFLAGS bellow.
+# - any questions can send me an email: bh_binghu@163.com.
 
 set(CMAKE_SYSTEM_NAME RTEMS)
 set(CMAKE_SYSTEM_PROCESSOR arm)
